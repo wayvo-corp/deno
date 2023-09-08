@@ -531,6 +531,19 @@ impl CliMainWorkerFactory {
       }
     }
   }
+
+  // START create_module_loader
+  pub fn create_module_loader(
+    &self,
+    permissions: PermissionsContainer,
+  ) -> Rc<dyn ModuleLoader> {
+    self
+      .shared
+      .module_loader_factory
+      .create_for_main(PermissionsContainer::allow_all(), permissions)
+  }
+  // END create_module_loader
+
 }
 
 fn create_web_worker_callback(
