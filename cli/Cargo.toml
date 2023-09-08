@@ -2,7 +2,7 @@
 
 [package]
 name = "deno_lib"
-version = "1.36.4"
+version = "2.36.4"
 authors.workspace = true
 edition.workspace = true
 exclude = ["tests/testdata/npm/registry/*"]
