@@ -15,6 +15,13 @@ Create a new branch from a deno release branch
 
     Add fn create_module_loader
 
+5. Update cli/lsp/mod.ts
+
+    pub mod client;
+    pub mod diagnostics;
+    pub mod lsp_custom;
+    pub mod testing;
+
 # Deno
 
 A fork of Deno to allow the cli (specifically the module loader) to be embedded in rust.
