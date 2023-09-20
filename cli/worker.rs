@@ -90,7 +90,7 @@ pub struct CliMainWorkerOptions {
   pub unstable: bool,
 }
 
-pub struct SharedWorkerState {
+struct SharedWorkerState {
   options: CliMainWorkerOptions,
   storage_key_resolver: StorageKeyResolver,
   npm_resolver: Arc<CliNpmResolver>,
@@ -380,7 +380,7 @@ impl CliMainWorkerFactory {
     let maybe_inspector_server = shared.maybe_inspector_server.clone();
 
     let create_web_worker_cb =
-      create_web_worker_callback(shared.clone(), stdio.clone());
+      create_web_worker_callback(shared.clone(), stdio.clone(), None);
 
     let maybe_storage_key = shared
       .storage_key_resolver
@@ -543,8 +543,8 @@ impl CliMainWorkerFactory {
       .create_for_main(PermissionsContainer::allow_all(), permissions)
   }
 
-  pub fn get_shared_worker_state(&self) -> Arc<SharedWorkerState> {
-    self.shared.clone()
+  pub fn create_web_worker_callback<F>(&self, extension_callback: Option<Fn() -> Vec<Extension>>) -> Arc<CreateWebWorkerCb>  {
+    create_web_worker_callback(self.shared.clone(), Default::default(), extension_callback)
   }
   // END create_module_loader
 
@@ -553,6 +553,7 @@ impl CliMainWorkerFactory {
 fn create_web_worker_callback(
   shared: Arc<SharedWorkerState>,
   stdio: deno_runtime::deno_io::Stdio,
+  extension_callback: Option<Fn() -> Vec<Extension>>,
 ) -> Arc<CreateWebWorkerCb> {
   Arc::new(move |args| {
     let maybe_inspector_server = shared.maybe_inspector_server.clone();
@@ -564,9 +565,12 @@ fn create_web_worker_callback(
     let maybe_source_map_getter =
       shared.module_loader_factory.create_source_map_getter();
     let create_web_worker_cb =
-      create_web_worker_callback(shared.clone(), stdio.clone());
+      create_web_worker_callback(shared.clone(), stdio.clone(), extension_callback);
 
-    let extensions = ops::cli_exts(shared.npm_resolver.clone());
+    let mut extensions = ops::cli_exts(shared.npm_resolver.clone());
+    if let Some(cb) = extension_callback {
+      extensions.push(cb());
+    }
 
     let maybe_storage_key = shared
       .storage_key_resolver
