@@ -404,13 +404,13 @@ fn main() {
     panic!("Cross compiling with snapshot is not supported.");
   }
 
-  let symbols_path = std::path::Path::new("napi").join(
-    format!("generated_symbol_exports_list_{}.def", env::consts::OS).as_str(),
-  )
-  .canonicalize()
-  .expect(
-    "Missing symbols list! Generate using tools/napi/generate_symbols_lists.js",
-  );
+  // let symbols_path = std::path::Path::new("napi").join(
+  //   format!("generated_symbol_exports_list_{}.def", env::consts::OS).as_str(),
+  // )
+  // .canonicalize()
+  // .expect(
+  //   "Missing symbols list! Generate using tools/napi/generate_symbols_lists.js",
+  // );
 
   // #[cfg(target_os = "windows")]
   // println!(
