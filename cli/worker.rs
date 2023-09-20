@@ -90,7 +90,7 @@ pub struct CliMainWorkerOptions {
   pub unstable: bool,
 }
 
-struct SharedWorkerState {
+pub struct SharedWorkerState {
   options: CliMainWorkerOptions,
   storage_key_resolver: StorageKeyResolver,
   npm_resolver: Arc<CliNpmResolver>,
