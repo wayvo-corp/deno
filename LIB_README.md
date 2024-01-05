@@ -9,6 +9,9 @@ Create a new branch from a deno release branch
 
 2. Update cli/Cargo.toml
 
+   Add lib entry and remove the bin entry
+   Change the package name from deno to deno_lib
+
 3. Add cli/lib.rs
 
 4. Update cli/worker.rs
@@ -21,6 +24,10 @@ Create a new branch from a deno release branch
    pub mod diagnostics;
    pub mod lsp_custom;
    pub mod testing;
+
+6. Update cli/build.rs
+
+   Comment out all the bin targets
 
 # Deno
 
