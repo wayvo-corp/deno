@@ -52,3 +52,79 @@ use std::future::Future;
 use std::path::PathBuf;
 
 pub use deno_runtime;
+
+// NOTE(bartlomieju): keep IDs in sync with `runtime/90_deno_ns.js` (search for `unstableFeatures`)
+pub(crate) static UNSTABLE_GRANULAR_FLAGS: &[(
+  // flag name
+  &str,
+  // help text
+  &str,
+  // id to enable it in runtime/99_main.js
+  i32,
+)] = &[
+  (
+    deno_runtime::deno_broadcast_channel::UNSTABLE_FEATURE_NAME,
+    "Enable unstable `BroadcastChannel` API",
+    1,
+  ),
+  (
+    deno_runtime::deno_cron::UNSTABLE_FEATURE_NAME,
+    "Enable unstable Deno.cron API",
+    2,
+  ),
+  (
+    deno_runtime::deno_ffi::UNSTABLE_FEATURE_NAME,
+    "Enable unstable FFI APIs",
+    3,
+  ),
+  (
+    deno_runtime::deno_fs::UNSTABLE_FEATURE_NAME,
+    "Enable unstable file system APIs",
+    4,
+  ),
+  (
+    deno_runtime::ops::http::UNSTABLE_FEATURE_NAME,
+    "Enable unstable HTTP APIs",
+    5,
+  ),
+  (
+    deno_runtime::deno_kv::UNSTABLE_FEATURE_NAME,
+    "Enable unstable Key-Value store APIs",
+    6,
+  ),
+  (
+    deno_runtime::deno_net::UNSTABLE_FEATURE_NAME,
+    "Enable unstable net APIs",
+    7,
+  ),
+  (
+    "unsafe-proto",
+    "Enable unsafe __proto__ support. This is a security risk.",
+    // This number is used directly in the JS code. Search
+    // for "unstableFeatures" to see where it's used.
+    8,
+  ),
+  (
+    deno_runtime::deno_webgpu::UNSTABLE_FEATURE_NAME,
+    "Enable unstable `WebGPU` API",
+    9,
+  ),
+  (
+    deno_runtime::ops::worker_host::UNSTABLE_FEATURE_NAME,
+    "Enable unstable Web Worker APIs",
+    10,
+  ),
+];
+
+pub(crate) fn unstable_exit_cb(_feature: &str, api_name: &str) {
+  // TODO(bartlomieju): change to "The `--unstable-{feature}` flag must be provided.".
+  eprintln!("Unstable API '{api_name}'. The --unstable flag must be provided.");
+  std::process::exit(70);
+}
+
+#[allow(dead_code)]
+pub(crate) fn unstable_warn_cb(feature: &str) {
+  eprintln!(
+    "The `--unstable` flag is deprecated, use --unstable-{feature} instead."
+  );
+}

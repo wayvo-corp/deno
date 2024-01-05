@@ -773,11 +773,7 @@ fn create_web_worker_callback(
       extension_callback.clone(),
     );
 
-    let mut extensions = ops::cli_exts(shared.npm_resolver.clone());
-    let mut custom = extension_callback();
-    if custom.len() > 0 {
-      extensions.append(&mut custom);
-    }
+    let mut extensions = extension_callback();
 
     let maybe_storage_key = shared
       .storage_key_resolver
