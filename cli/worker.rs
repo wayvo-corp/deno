@@ -532,8 +532,11 @@ impl CliMainWorkerFactory {
       shared.module_loader_factory.create_source_map_getter();
     let maybe_inspector_server = shared.maybe_inspector_server.clone();
 
-    let create_web_worker_cb =
-      create_web_worker_callback(shared.clone(), stdio.clone());
+    let create_web_worker_cb = create_web_worker_callback(
+      shared.clone(),
+      stdio.clone(),
+      Arc::new(|| vec![]),
+    );
 
     let maybe_storage_key = shared
       .storage_key_resolver
@@ -723,11 +726,37 @@ impl CliMainWorkerFactory {
       }
     }
   }
+
+  // START create_module_loader
+  pub fn create_module_loader(
+    &self,
+    permissions: PermissionsContainer,
+  ) -> Rc<dyn ModuleLoader> {
+    self
+      .shared
+      .module_loader_factory
+      .create_for_main(PermissionsContainer::allow_all(), permissions)
+  }
+
+  pub fn create_web_worker_callback(
+    &self,
+    extension_callback: Arc<ExtensionCb>,
+  ) -> Arc<CreateWebWorkerCb> {
+    create_web_worker_callback(
+      self.shared.clone(),
+      Default::default(),
+      extension_callback,
+    )
+  }
+  // END create_module_loader
 }
+
+pub type ExtensionCb = dyn Fn() -> Vec<Extension> + Sync + Send;
 
 fn create_web_worker_callback(
   shared: Arc<SharedWorkerState>,
   stdio: deno_runtime::deno_io::Stdio,
+  extension_callback: Arc<ExtensionCb>,
 ) -> Arc<CreateWebWorkerCb> {
   Arc::new(move |args| {
     let maybe_inspector_server = shared.maybe_inspector_server.clone();
@@ -738,8 +767,11 @@ fn create_web_worker_callback(
     );
     let maybe_source_map_getter =
       shared.module_loader_factory.create_source_map_getter();
-    let create_web_worker_cb =
-      create_web_worker_callback(shared.clone(), stdio.clone());
+    let create_web_worker_cb = create_web_worker_callback(
+      shared.clone(),
+      stdio.clone(),
+      extension_callback.clone(),
+    );
 
     let maybe_storage_key = shared
       .storage_key_resolver
