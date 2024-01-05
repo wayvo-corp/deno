@@ -16,7 +16,16 @@ Create a new branch from a deno release branch
 
 4. Update cli/worker.rs
 
-   Add fn create_module_loader
+   Add fn create_module_loader & create_web_worker_callback with param ExtensionCb
+   and add the following code
+
+   ```rust
+   let mut extensions = ops::cli_exts(shared.npm_resolver.clone());
+   let mut custom = extension_callback();
+   if custom.len() > 0 {
+     extensions.append(&mut custom);
+   }
+   ```
 
 5. Update cli/lsp/mod.ts
 
@@ -28,6 +37,10 @@ Create a new branch from a deno release branch
 6. Update cli/build.rs
 
    Comment out all the bin targets
+
+7. Update cli/lib.rs
+
+   Check and add any new libs from main.rs
 
 # Deno
 

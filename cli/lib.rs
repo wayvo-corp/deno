@@ -7,6 +7,7 @@
 pub mod args;
 pub mod auth_tokens;
 pub mod cache;
+pub mod cdp;
 pub mod deno_std;
 pub mod emit;
 pub mod errors;

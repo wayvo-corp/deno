@@ -773,6 +773,12 @@ fn create_web_worker_callback(
       extension_callback.clone(),
     );
 
+    let mut extensions = ops::cli_exts(shared.npm_resolver.clone());
+    let mut custom = extension_callback();
+    if custom.len() > 0 {
+      extensions.append(&mut custom);
+    }
+
     let maybe_storage_key = shared
       .storage_key_resolver
       .resolve_storage_key(&args.main_module);
@@ -819,7 +825,7 @@ fn create_web_worker_callback(
           .clone(),
         node_ipc_fd: None,
       },
-      extensions: vec![],
+      extensions,
       startup_snapshot: crate::js::deno_isolate_init(),
       unsafely_ignore_certificate_errors: shared
         .options
