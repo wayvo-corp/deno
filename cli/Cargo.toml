@@ -1,25 +1,22 @@
 # Copyright 2018-2024 the Deno authors. All rights reserved. MIT license.
 
 [package]
-name = "deno"
-version = "1.43.1"
+name = "deno_lib"
+version = "1.43.3"
 authors.workspace = true
-default-run = "deno"
 edition.workspace = true
 exclude = ["bench/testdata/lsp_benchdata/"]
 license.workspace = true
 repository.workspace = true
-description = "Provides the deno executable"
+description = "Provides the deno lib"
 
-[[bin]]
-name = "deno"
-path = "main.rs"
-doc = false
-
-[[bin]]
-name = "denort"
-path = "mainrt.rs"
-doc = false
+[lib]
+name = "deno_lib"
+path = "lib.rs"
+test = false
+doctest = false
+harness = false
+crate-type = ["lib"]
 
 [[test]]
 name = "integration"
