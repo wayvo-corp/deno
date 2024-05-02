@@ -675,44 +675,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "702fc72eb24e5a1e48ce58027a675bc24edd52096d5397d4aea7c6dd9eca0bd1"
 
 [[package]]
-name = "cli_tests"
-version = "0.0.0"
-dependencies = [
- "bytes",
- "chrono",
- "deno_ast",
- "deno_bench_util",
- "deno_cache_dir",
- "deno_core",
- "deno_fetch",
- "deno_lockfile",
- "deno_terminal",
- "deno_tls",
- "fastwebsockets",
- "file_test_runner",
- "flaky_test",
- "http 1.1.0",
- "http-body-util",
- "hyper 1.1.0",
- "hyper-util",
- "nix 0.26.2",
- "once_cell",
- "os_pipe",
- "pretty_assertions",
- "serde",
- "serde_repr",
- "test_server",
- "tokio",
- "tokio-util",
- "tower-lsp",
- "trust-dns-client",
- "trust-dns-server",
- "url",
- "uuid",
- "zeromq",
-]
-
-[[package]]
 name = "clipboard-win"
 version = "5.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1058,110 +1020,6 @@ checksum = "bef552e6f588e446098f6ba40d89ac146c8c7b64aade83c051ee00bb5d2bc18d"
 dependencies = [
  "serde",
  "uuid",
-]
-
-[[package]]
-name = "deno"
-version = "1.43.1"
-dependencies = [
- "async-trait",
- "base32",
- "base64",
- "bincode",
- "bytes",
- "cache_control",
- "chrono",
- "clap",
- "clap_complete",
- "clap_complete_fig",
- "color-print",
- "console_static_text",
- "dashmap",
- "data-encoding",
- "deno_ast",
- "deno_bench_util",
- "deno_cache_dir",
- "deno_config",
- "deno_core",
- "deno_doc",
- "deno_emit",
- "deno_graph",
- "deno_lint",
- "deno_lockfile",
- "deno_npm",
- "deno_runtime",
- "deno_semver",
- "deno_task_shell",
- "deno_terminal",
- "dissimilar",
- "dotenvy",
- "dprint-plugin-json",
- "dprint-plugin-jupyter",
- "dprint-plugin-markdown",
- "dprint-plugin-typescript",
- "env_logger",
- "eszip",
- "fancy-regex",
- "faster-hex",
- "flate2",
- "fs3",
- "fwdansi",
- "glibc_version",
- "glob",
- "ignore",
- "import_map",
- "indexmap",
- "jsonc-parser",
- "junction",
- "lazy-regex",
- "libc",
- "libz-sys",
- "log",
- "lsp-types",
- "memmem",
- "monch",
- "napi_sym",
- "nix 0.26.2",
- "notify",
- "once_cell",
- "open",
- "os_pipe",
- "p256",
- "percent-encoding",
- "phf 0.11.2",
- "pin-project",
- "pretty_assertions",
- "quick-junit",
- "rand",
- "regex",
- "reqwest",
- "ring",
- "rustyline",
- "rustyline-derive",
- "serde",
- "serde_json",
- "serde_repr",
- "sha2",
- "shell-escape",
- "spki",
- "tar",
- "tempfile",
- "test_server",
- "text-size",
- "text_lines",
- "thiserror",
- "tokio",
- "tokio-util",
- "tower-lsp",
- "twox-hash",
- "typed-arena",
- "unicode-width",
- "uuid",
- "walkdir",
- "winapi",
- "winres",
- "zeromq",
- "zstd",
 ]
 
 [[package]]
@@ -1587,6 +1445,110 @@ dependencies = [
  "tokio",
  "url",
  "uuid",
+]
+
+[[package]]
+name = "deno_lib"
+version = "1.43.1"
+dependencies = [
+ "async-trait",
+ "base32",
+ "base64",
+ "bincode",
+ "bytes",
+ "cache_control",
+ "chrono",
+ "clap",
+ "clap_complete",
+ "clap_complete_fig",
+ "color-print",
+ "console_static_text",
+ "dashmap",
+ "data-encoding",
+ "deno_ast",
+ "deno_bench_util",
+ "deno_cache_dir",
+ "deno_config",
+ "deno_core",
+ "deno_doc",
+ "deno_emit",
+ "deno_graph",
+ "deno_lint",
+ "deno_lockfile",
+ "deno_npm",
+ "deno_runtime",
+ "deno_semver",
+ "deno_task_shell",
+ "deno_terminal",
+ "dissimilar",
+ "dotenvy",
+ "dprint-plugin-json",
+ "dprint-plugin-jupyter",
+ "dprint-plugin-markdown",
+ "dprint-plugin-typescript",
+ "env_logger",
+ "eszip",
+ "fancy-regex",
+ "faster-hex",
+ "flate2",
+ "fs3",
+ "fwdansi",
+ "glibc_version",
+ "glob",
+ "ignore",
+ "import_map",
+ "indexmap",
+ "jsonc-parser",
+ "junction",
+ "lazy-regex",
+ "libc",
+ "libz-sys",
+ "log",
+ "lsp-types",
+ "memmem",
+ "monch",
+ "napi_sym",
+ "nix 0.26.2",
+ "notify",
+ "once_cell",
+ "open",
+ "os_pipe",
+ "p256",
+ "percent-encoding",
+ "phf 0.11.2",
+ "pin-project",
+ "pretty_assertions",
+ "quick-junit",
+ "rand",
+ "regex",
+ "reqwest",
+ "ring",
+ "rustyline",
+ "rustyline-derive",
+ "serde",
+ "serde_json",
+ "serde_repr",
+ "sha2",
+ "shell-escape",
+ "spki",
+ "tar",
+ "tempfile",
+ "test_server",
+ "text-size",
+ "text_lines",
+ "thiserror",
+ "tokio",
+ "tokio-util",
+ "tower-lsp",
+ "twox-hash",
+ "typed-arena",
+ "unicode-width",
+ "uuid",
+ "walkdir",
+ "winapi",
+ "winres",
+ "zeromq",
+ "zstd",
 ]
 
 [[package]]
@@ -2633,20 +2595,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c007b1ae3abe1cb6f85a16305acd418b7ca6343b953633fee2b76d8f108b830f"
 
 [[package]]
-name = "file_test_runner"
-version = "0.4.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5f33b00489de0a5fd03df89aefe9fa55da5da3c1a207ea19cd381d1de7e6204b"
-dependencies = [
- "anyhow",
- "crossbeam-channel",
- "deno_terminal",
- "parking_lot 0.12.1",
- "regex",
- "thiserror",
-]
-
-[[package]]
 name = "filetime"
 version = "0.2.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2663,17 +2611,6 @@ name = "fixedbitset"
 version = "0.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0ce7134b9999ecaf8bcd65542e436736ef32ddca1b3e06094cb6ec5755203b80"
-
-[[package]]
-name = "flaky_test"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "479cde5eb168cf5a056dd98f311cbfab7494c216394e4fb9eba0336827a8db93"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 1.0.109",
-]
 
 [[package]]
 name = "flate2"
@@ -4118,21 +4055,6 @@ dependencies = [
  "termcolor",
  "thiserror",
  "unicode-xid",
-]
-
-[[package]]
-name = "napi-build"
-version = "1.2.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ebd4419172727423cf30351406c54f6cc1b354a2cfb4f1dba3e6cd07f6d5522b"
-
-[[package]]
-name = "napi-sys"
-version = "2.2.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "529671ebfae679f2ce9630b62dd53c72c56b3eb8b2c852e7e2fa91704ff93d67"
-dependencies = [
- "libloading 0.7.4",
 ]
 
 [[package]]
@@ -6573,23 +6495,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "test_ffi"
-version = "0.1.0"
-dependencies = [
- "pretty_assertions",
- "test_server",
-]
-
-[[package]]
-name = "test_napi"
-version = "0.1.0"
-dependencies = [
- "napi-build",
- "napi-sys",
- "test_server",
-]
-
-[[package]]
 name = "test_server"
 version = "0.1.0"
 dependencies = [
@@ -6930,26 +6835,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "trust-dns-client"
-version = "0.22.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6c408c32e6a9dbb38037cece35740f2cf23c875d8ca134d33631cec83f74d3fe"
-dependencies = [
- "cfg-if",
- "data-encoding",
- "futures-channel",
- "futures-util",
- "lazy_static",
- "radix_trie",
- "rand",
- "thiserror",
- "time",
- "tokio",
- "tracing",
- "trust-dns-proto",
-]
-
-[[package]]
 name = "trust-dns-proto"
 version = "0.22.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6993,28 +6878,6 @@ dependencies = [
  "thiserror",
  "tokio",
  "tracing",
- "trust-dns-proto",
-]
-
-[[package]]
-name = "trust-dns-server"
-version = "0.22.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "99022f9befa6daec2a860be68ac28b1f0d9d7ccf441d8c5a695e35a58d88840d"
-dependencies = [
- "async-trait",
- "bytes",
- "cfg-if",
- "enum-as-inner",
- "futures-executor",
- "futures-util",
- "serde",
- "thiserror",
- "time",
- "tokio",
- "toml",
- "tracing",
- "trust-dns-client",
  "trust-dns-proto",
 ]
 
