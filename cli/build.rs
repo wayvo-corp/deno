@@ -420,17 +420,6 @@ fn main() {
     let cli_snapshot_path = o.join("CLI_SNAPSHOT.bin");
     create_cli_snapshot(cli_snapshot_path);
   }
-
-  #[cfg(target_os = "windows")]
-  {
-    let mut res = winres::WindowsResource::new();
-    res.set_icon("deno.ico");
-    res.set_language(winapi::um::winnt::MAKELANGID(
-      winapi::um::winnt::LANG_ENGLISH,
-      winapi::um::winnt::SUBLANG_ENGLISH_US,
-    ));
-    res.compile().unwrap();
-  }
 }
 
 fn deno_webgpu_get_declaration() -> PathBuf {
