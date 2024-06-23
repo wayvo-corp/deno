@@ -3,36 +3,7 @@
 [workspace]
 resolver = "2"
 members = [
-  "bench_util",
   "cli",
-  "cli/napi/sym",
-  "ext/broadcast_channel",
-  "ext/cache",
-  "ext/canvas",
-  "ext/console",
-  "ext/cron",
-  "ext/crypto",
-  "ext/fetch",
-  "ext/ffi",
-  "ext/fs",
-  "ext/http",
-  "ext/io",
-  "ext/kv",
-  "ext/napi",
-  "ext/net",
-  "ext/node",
-  "ext/url",
-  "ext/web",
-  "ext/webgpu",
-  "ext/webidl",
-  "ext/websocket",
-  "ext/webstorage",
-  "runtime",
-  "runtime/permissions",
-  "tests",
-  "tests/ffi",
-  "tests/napi",
-  "tests/util/server",
 ]
 exclude = ["tests/util/std/hash/_wasm"]
 

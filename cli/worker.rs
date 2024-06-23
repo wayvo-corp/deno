@@ -124,8 +124,8 @@ pub struct CliMainWorkerOptions {
   pub create_coverage_collector: Option<CreateCoverageCollectorCb>,
 }
 
-struct SharedWorkerState {
-  options: CliMainWorkerOptions,
+pub struct SharedWorkerState {
+  pub options: CliMainWorkerOptions,
   subcommand: DenoSubcommand,
   storage_key_resolver: StorageKeyResolver,
   npm_resolver: Arc<dyn CliNpmResolver>,
@@ -136,7 +136,7 @@ struct SharedWorkerState {
   compiled_wasm_module_store: CompiledWasmModuleStore,
   module_loader_factory: Box<dyn ModuleLoaderFactory>,
   root_cert_store_provider: Arc<dyn RootCertStoreProvider>,
-  fs: Arc<dyn deno_fs::FileSystem>,
+  pub fs: Arc<dyn deno_fs::FileSystem>,
   maybe_file_watcher_communicator: Option<Arc<WatcherCommunicator>>,
   maybe_inspector_server: Option<Arc<InspectorServer>>,
   maybe_lockfile: Option<Arc<Mutex<Lockfile>>>,
@@ -156,9 +156,9 @@ impl SharedWorkerState {
 
 pub struct CliMainWorker {
   main_module: ModuleSpecifier,
-  is_main_cjs: bool,
-  worker: MainWorker,
-  shared: Arc<SharedWorkerState>,
+  pub is_main_cjs: bool,
+  pub worker: MainWorker,
+  pub shared: Arc<SharedWorkerState>,
 }
 
 impl CliMainWorker {
@@ -396,7 +396,7 @@ impl CliMainWorker {
 }
 
 pub struct CliMainWorkerFactory {
-  shared: Arc<SharedWorkerState>,
+  pub shared: Arc<SharedWorkerState>,
 }
 
 impl CliMainWorkerFactory {
@@ -474,7 +474,26 @@ impl CliMainWorkerFactory {
     mode: WorkerExecutionMode,
     main_module: ModuleSpecifier,
     permissions: PermissionsContainer,
-    custom_extensions: Vec<Extension>,
+    _: Vec<Extension>,
+    stdio: deno_runtime::deno_io::Stdio,
+  ) -> Result<CliMainWorker, AnyError> {
+    self
+      .create_custom_worker2(
+        mode,
+        main_module,
+        permissions,
+        Arc::new(|| vec![]),
+        Default::default(),
+      )
+      .await
+  }
+
+  pub async fn create_custom_worker2(
+    &self,
+    mode: WorkerExecutionMode,
+    main_module: ModuleSpecifier,
+    permissions: PermissionsContainer,
+    extension_callback: Arc<ExtensionCb>,
     stdio: deno_runtime::deno_io::Stdio,
   ) -> Result<CliMainWorker, AnyError> {
     let shared = &self.shared;
@@ -552,8 +571,12 @@ impl CliMainWorkerFactory {
       .create_for_main(PermissionsContainer::allow_all(), permissions.clone());
     let maybe_inspector_server = shared.maybe_inspector_server.clone();
 
-    let create_web_worker_cb =
-      create_web_worker_callback(mode, shared.clone(), stdio.clone());
+    let create_web_worker_cb = create_web_worker_callback(
+      mode,
+      shared.clone(),
+      stdio.clone(),
+      extension_callback.clone(),
+    );
 
     let maybe_storage_key = shared
       .storage_key_resolver
@@ -614,7 +637,7 @@ impl CliMainWorkerFactory {
         serve_port: shared.serve_port,
         serve_host: shared.serve_host.clone(),
       },
-      extensions: custom_extensions,
+      extensions: extension_callback(),
       startup_snapshot: crate::js::deno_isolate_init(),
       create_params: None,
       unsafely_ignore_certificate_errors: shared
@@ -645,7 +668,7 @@ impl CliMainWorkerFactory {
       ),
       stdio,
       feature_checker,
-      skip_op_registration: shared.options.skip_op_registration,
+      skip_op_registration: false,
       v8_code_cache: shared.code_cache.clone(),
     };
 
@@ -750,12 +773,39 @@ impl CliMainWorkerFactory {
       }
     }
   }
+
+  // START create_module_loader
+  pub fn create_module_loader(
+    &self,
+    permissions: PermissionsContainer,
+  ) -> ModuleLoaderAndSourceMapGetter {
+    self
+      .shared
+      .module_loader_factory
+      .create_for_main(PermissionsContainer::allow_all(), permissions)
+  }
+
+  pub fn create_web_worker_callback(
+    &self,
+    extension_callback: Arc<ExtensionCb>,
+  ) -> Arc<CreateWebWorkerCb> {
+    create_web_worker_callback(
+      WorkerExecutionMode::None,
+      self.shared.clone(),
+      Default::default(),
+      extension_callback,
+    )
+  }
+  // END create_module_loader
 }
+
+pub type ExtensionCb = dyn Fn() -> Vec<Extension> + Sync + Send;
 
 fn create_web_worker_callback(
   mode: WorkerExecutionMode,
   shared: Arc<SharedWorkerState>,
   stdio: deno_runtime::deno_io::Stdio,
+  extension_callback: Arc<ExtensionCb>,
 ) -> Arc<CreateWebWorkerCb> {
   Arc::new(move |args| {
     let maybe_inspector_server = shared.maybe_inspector_server.clone();
@@ -767,8 +817,15 @@ fn create_web_worker_callback(
       args.parent_permissions.clone(),
       args.permissions.clone(),
     );
-    let create_web_worker_cb =
-      create_web_worker_callback(mode, shared.clone(), stdio.clone());
+
+    let create_web_worker_cb = create_web_worker_callback(
+      mode,
+      shared.clone(),
+      stdio.clone(),
+      extension_callback.clone(),
+    );
+
+    let mut extensions = extension_callback();
 
     let maybe_storage_key = shared
       .storage_key_resolver
@@ -821,7 +878,7 @@ fn create_web_worker_callback(
         serve_port: shared.serve_port,
         serve_host: shared.serve_host.clone(),
       },
-      extensions: vec![],
+      extensions,
       startup_snapshot: crate::js::deno_isolate_init(),
       unsafely_ignore_certificate_errors: shared
         .options
