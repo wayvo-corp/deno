@@ -1,25 +1,22 @@
 # Copyright 2018-2024 the Deno authors. All rights reserved. MIT license.
 
 [package]
-name = "deno"
+name = "deno_lib"
 version = "1.46.3"
 authors.workspace = true
-default-run = "deno"
 edition.workspace = true
 exclude = ["bench/testdata/lsp_benchdata/"]
 license.workspace = true
 repository.workspace = true
-description = "Provides the deno executable"
+description = "Provides the deno lib"
 
-[[bin]]
-name = "deno"
-path = "main.rs"
-doc = false
-
-[[bin]]
-name = "denort"
-path = "mainrt.rs"
-doc = false
+[lib]
+name = "deno_lib"
+path = "lib.rs"
+test = false
+doctest = false
+harness = false
+crate-type = ["lib"]
 
 [[test]]
 name = "integration"
@@ -49,8 +46,13 @@ hmr = ["deno_runtime/hmr"]
 __vendored_zlib_ng = ["flate2/zlib-ng-compat", "libz-sys/zlib-ng"]
 
 [build-dependencies]
-deno_runtime = { workspace = true, features = ["include_js_files_for_snapshotting", "only_snapshotted_js_sources"] }
-deno_core = { workspace = true, features = ["include_js_files_for_snapshotting"] }
+deno_runtime = { workspace = true, features = [
+    "include_js_files_for_snapshotting",
+    "only_snapshotted_js_sources",
+] }
+deno_core = { workspace = true, features = [
+    "include_js_files_for_snapshotting",
+] }
 lazy-regex.workspace = true
 serde.workspace = true
 serde_json.workspace = true
@@ -63,10 +65,23 @@ winapi.workspace = true
 winres.workspace = true
 
 [dependencies]
-deno_ast = { workspace = true, features = ["bundler", "cjs", "codegen", "proposal", "react", "sourcemap", "transforms", "typescript", "view", "visit"] }
+deno_ast = { workspace = true, features = [
+    "bundler",
+    "cjs",
+    "codegen",
+    "proposal",
+    "react",
+    "sourcemap",
+    "transforms",
+    "typescript",
+    "view",
+    "visit",
+] }
 deno_cache_dir = { workspace = true }
 deno_config = { version = "=0.30.1", features = ["workspace", "sync"] }
-deno_core = { workspace = true, features = ["include_js_files_for_snapshotting"] }
+deno_core = { workspace = true, features = [
+    "include_js_files_for_snapshotting",
+] }
 deno_doc = { version = "0.147.0", features = ["html", "syntect"] }
 deno_emit = "=0.44.0"
 deno_graph = { version = "=0.81.3" }
@@ -74,7 +89,9 @@ deno_lint = { version = "=0.63.1", features = ["docs"] }
 deno_lockfile.workspace = true
 deno_npm = "=0.23.1"
 deno_package_json.workspace = true
-deno_runtime = { workspace = true, features = ["include_js_files_for_snapshotting"] }
+deno_runtime = { workspace = true, features = [
+    "include_js_files_for_snapshotting",
+] }
 deno_semver = "=0.5.10"
 deno_task_shell = "=0.17.0"
 deno_terminal.workspace = true
@@ -163,12 +180,23 @@ uuid = { workspace = true, features = ["serde"] }
 walkdir = "=2.3.2"
 which.workspace = true
 zeromq.workspace = true
-zip = { version = "2.1.6", default-features = false, features = ["deflate-flate2"] }
+zip = { version = "2.1.6", default-features = false, features = [
+    "deflate-flate2",
+] }
 zstd.workspace = true
 
 [target.'cfg(windows)'.dependencies]
 junction.workspace = true
-winapi = { workspace = true, features = ["knownfolders", "mswsock", "objbase", "shlobj", "tlhelp32", "winbase", "winerror", "winsock2"] }
+winapi = { workspace = true, features = [
+    "knownfolders",
+    "mswsock",
+    "objbase",
+    "shlobj",
+    "tlhelp32",
+    "winbase",
+    "winerror",
+    "winsock2",
+] }
 
 [target.'cfg(unix)'.dependencies]
 nix.workspace = true
