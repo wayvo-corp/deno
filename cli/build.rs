@@ -365,8 +365,8 @@ fn main() {
     return;
   }
 
-  deno_napi::print_linker_flags("deno");
-  deno_napi::print_linker_flags("denort");
+  // deno_napi::print_linker_flags("deno");
+  // deno_napi::print_linker_flags("denort");
 
   // Host snapshots won't work when cross compiling.
   let target = env::var("TARGET").unwrap();
@@ -400,24 +400,6 @@ fn main() {
   println!("cargo:rustc-env=TARGET={}", env::var("TARGET").unwrap());
   println!("cargo:rustc-env=PROFILE={}", env::var("PROFILE").unwrap());
 
-  if cfg!(windows) {
-    // these dls load slowly, so delay loading them
-    let dlls = [
-      // webgpu
-      "d3dcompiler_47",
-      "OPENGL32",
-      // network related functions
-      "iphlpapi",
-    ];
-    for dll in dlls {
-      println!("cargo:rustc-link-arg-bin=deno=/delayload:{dll}.dll");
-      println!("cargo:rustc-link-arg-bin=denort=/delayload:{dll}.dll");
-    }
-    // enable delay loading
-    println!("cargo:rustc-link-arg-bin=deno=delayimp.lib");
-    println!("cargo:rustc-link-arg-bin=denort=delayimp.lib");
-  }
-
   let c = PathBuf::from(env::var_os("CARGO_MANIFEST_DIR").unwrap());
   let o = PathBuf::from(env::var_os("OUT_DIR").unwrap());
 
@@ -428,17 +410,6 @@ fn main() {
   {
     let cli_snapshot_path = o.join("CLI_SNAPSHOT.bin");
     create_cli_snapshot(cli_snapshot_path);
-  }
-
-  #[cfg(target_os = "windows")]
-  {
-    let mut res = winres::WindowsResource::new();
-    res.set_icon("deno.ico");
-    res.set_language(winapi::um::winnt::MAKELANGID(
-      winapi::um::winnt::LANG_ENGLISH,
-      winapi::um::winnt::SUBLANG_ENGLISH_US,
-    ));
-    res.compile().unwrap();
   }
 }
 
