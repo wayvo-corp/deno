@@ -47,6 +47,7 @@ use deno_terminal::colors;
 use node_resolver::NodeResolutionKind;
 use node_resolver::ResolutionMode;
 use tokio::select;
+use tokio::sync::OnceCell;
 
 use crate::args::CliLockfile;
 use crate::args::DenoSubcommand;
@@ -57,6 +58,16 @@ use crate::util::checksum;
 use crate::util::file_watcher::WatcherCommunicator;
 use crate::util::file_watcher::WatcherRestartMode;
 use crate::version;
+
+static EXTENSION_CALLBACK: OnceCell<Arc<ExtensionCb>> = OnceCell::const_new();
+
+fn get_extension_callback() -> Arc<ExtensionCb> {
+  EXTENSION_CALLBACK.get().unwrap().clone()
+}
+
+pub fn init_extension_callback(cb: Arc<ExtensionCb>) {
+  EXTENSION_CALLBACK.set(cb).ok();
+}
 
 pub struct CreateModuleLoaderResult {
   pub module_loader: Rc<dyn ModuleLoader>,
@@ -481,7 +492,7 @@ impl CliMainWorkerFactory {
         mode,
         main_module,
         permissions,
-        Arc::new(|| vec![]),
+        get_extension_callback(),
         Default::default(),
       )
       .await

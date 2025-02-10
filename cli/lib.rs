@@ -17,6 +17,7 @@ pub mod graph_util;
 pub mod http_util;
 pub mod js;
 pub mod jsr;
+mod lib_main;
 pub mod lsp;
 pub mod module_loader;
 pub mod node;
@@ -38,6 +39,7 @@ pub use crate::args::Flags;
 pub use crate::util::display;
 pub use crate::util::v8::get_v8_flags_from_env;
 pub use crate::util::v8::init_v8_flags;
+pub use lib_main::{run_deno, run_deno_with_args};
 
 pub use args::TaskFlags;
 use deno_resolver::npm::ByonmResolvePkgFolderFromDenoReqError;
@@ -82,3 +84,5 @@ pub(crate) fn unstable_warn_cb(feature: &str, api_name: &str) {
       ))
     );
 }
+
+pub fn main() {}
